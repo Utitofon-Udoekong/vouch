@@ -3,6 +3,7 @@
 import { ConnectButton, NetworkButton } from "@/components/ConnectButton";
 import { ProtectData } from "@/components/ProtectData";
 import { GrantAccess } from "@/components/GrantAccess";
+import { ProtectedDataList } from "@/components/ProtectedDataList";
 import { useAccount } from "wagmi";
 import Link from "next/link";
 
@@ -79,7 +80,7 @@ export default function Dashboard() {
                             </div>
                         ) : (
                             <div className="space-y-12">
-                                {/* Module 1 */}
+                                {/* Module 1: Yield Assets */}
                                 <section>
                                     <div className="flex items-center justify-between mb-6">
                                         <h2 className="text-xl font-medium text-white">Yield Assets</h2>
@@ -88,30 +89,7 @@ export default function Dashboard() {
 
                                     <div className="grid lg:grid-cols-2 gap-8">
                                         <ProtectData />
-
-                                        {/* Info Card Placeholder */}
-                                        <div className="border border-[#27272a] p-6 bg-[#0c0c0e] flex flex-col justify-between">
-                                            <div>
-                                                <h3 className="text-sm font-medium text-white mb-4">Latest Activity</h3>
-                                                <div className="space-y-4">
-                                                    {[1, 2, 3].map((i) => (
-                                                        <div key={i} className="flex items-center justify-between text-xs border-b border-[#27272a] pb-2 last:border-0 last:pb-0">
-                                                            <div className="flex items-center gap-2">
-                                                                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full"></div>
-                                                                <span className="text-gray-400">System Scan</span>
-                                                            </div>
-                                                            <span className="font-mono text-gray-600">09:4{i}:22</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className="mt-8 pt-4 border-t border-[#27272a]">
-                                                <div className="text-[10px] uppercase text-gray-500">System Load</div>
-                                                <div className="w-full bg-[#27272a] h-1 mt-2">
-                                                    <div className="bg-[#ea580c] h-1 w-[24%]"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <ProtectedDataList />
                                     </div>
                                 </section>
 

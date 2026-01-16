@@ -77,24 +77,22 @@ export default function Home() {
                 <div className="w-2.5 h-2.5 rounded-full bg-[#27272a]"></div>
                 <div className="w-2.5 h-2.5 rounded-full bg-[#27272a]"></div>
                 <div className="w-2.5 h-2.5 rounded-full bg-[#27272a]"></div>
-                <div className="ml-4 font-mono text-xs text-gray-500">yield_verifier.tsx</div>
+                <div className="ml-4 font-mono text-xs text-gray-500">protect_yield.ts</div>
               </div>
 
               {/* Window Content */}
-              <div className="p-6 font-mono text-sm leading-relaxed overflow-hidden bg-[#0c0c0e]">
-                <pre className="text-gray-300 whitespace-pre-wrap">
-                  <span className="text-[#ea580c]">import</span> {`{ Verifier }`} <span className="text-[#ea580c]">from</span> <span className="text-green-400">&apos;@vouch/sdk&apos;</span>;
-
-                  <span className="text-gray-500">// Initialize TEE Enclave</span>
-                  <span className="text-[#ea580c]">const</span> session = <span className="text-[#ea580c]">await</span> Verifier.init({`{`}
-                  enclave: <span className="text-green-400">&apos;sgx-standard&apos;</span>,
-                  privacy: <span className="text-[#ea580c]">true</span>
-                  {`}`});
-
-                  <span className="text-gray-500">// Verify Asset Yield</span>
-                  <span className="text-[#ea580c]">const</span> proof = session.verify({`{`}
-                  asset: <span className="text-green-400">&apos;real_estate_01&apos;</span>,
-                  yield: <span className="text-green-400">&apos;7.5%&apos;</span>
+              <div className="p-6 font-mono text-sm leading-loose overflow-hidden bg-[#0c0c0e]">
+                <pre className="text-gray-300 whitespace-pre overflow-x-auto">
+                  <span className="text-[#ea580c]">import</span> {`{ IExecDataProtector }`} <span className="text-[#ea580c]">from</span> <span className="text-green-400">&apos;@iexec/dataprotector&apos;</span>;{'\n\n'}
+                  <span className="text-gray-500">// Encrypt yield data with TEE</span>{'\n'}
+                  <span className="text-[#ea580c]">const</span> protectedData = <span className="text-[#ea580c]">await</span> dataProtector.core.protectData({`{`}{'\n'}
+                  {'  '}name: <span className="text-green-400">&apos;BLDG_A_2024&apos;</span>,{'\n'}
+                  {'  '}data: {`{`} yieldPercent: <span className="text-purple-400">7.5</span>, occupancy: <span className="text-purple-400">92</span> {`}`}{'\n'}
+                  {`}`});{'\n\n'}
+                  <span className="text-gray-500">// Grant lender access to verify</span>{'\n'}
+                  <span className="text-[#ea580c]">await</span> dataProtector.core.grantAccess({`{`}{'\n'}
+                  {'  '}protectedData: protectedData.address,{'\n'}
+                  {'  '}authorizedApp: <span className="text-green-400">LENDER_APP</span>{'\n'}
                   {`}`});
                 </pre>
               </div>
