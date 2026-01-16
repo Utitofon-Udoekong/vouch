@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { IExecDataProtector, type ProtectedData, type DataObject } from "@iexec/dataprotector";
-import type { EIP1193Provider } from "viem";
+import { EIP1193Provider } from "viem";
 
 interface ProtectDataParams {
   name: string;

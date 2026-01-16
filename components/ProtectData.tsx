@@ -15,10 +15,8 @@ export function ProtectData() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!name || !yieldValue) return;
 
-        // Build data object conforming to iExec DataObject type
         const data: DataObject = {
             yieldPercent: parseFloat(yieldValue),
             verifiedAt: new Date().toISOString(),
@@ -29,118 +27,96 @@ export function ProtectData() {
             data.occupancyPercent = parseFloat(occupancy);
         }
 
-        const result = await protectData({
-            name,
-            data,
-        });
+        const result = await protectData({ name, data });
 
         if (result) {
             setProtectedDataAddress(result.address);
-            // Reset form
             setName("");
             setYieldValue("");
             setOccupancy("");
         }
     };
 
-    if (!isConnected) {
-        return (
-            <div className="card">
-                <h3 className="card-title">🔒 Protect Your Yield Data</h3>
-                <p className="text-gray-400">Connect your wallet to protect your property yield data.</p>
-            </div>
-        );
-    }
-
-    if (!isInitialized) {
-        return (
-            <div className="card">
-                <h3 className="card-title">🔒 Protect Your Yield Data</h3>
-                <p className="text-yellow-400">Initializing DataProtector... Make sure you&apos;re on iExec Bellecour network.</p>
-            </div>
-        );
-    }
+    if (!isConnected) return null;
 
     return (
-        <div className="card">
-            <h3 className="card-title">🔒 Protect Your Yield Data</h3>
-            <p className="text-gray-400 mb-6">
-                Encrypt your property income data. Only authorized apps can access it.
-            </p>
+        <div className="border border-[#27272a] bg-[#09090b]">
+            {/* Header */}
+            <div className="border-b border-[#27272a] p-4 flex items-center justify-between bg-[#0c0c0e]">
+                <h3 className="text-sm font-medium text-white">Encryption Module</h3>
+                <div className="flex space-x-1">
+                    <div className="w-2 h-2 rounded-full bg-[#27272a]"></div>
+                    <div className="w-2 h-2 rounded-full bg-[#27272a]"></div>
+                </div>
+            </div>
 
-            {protectedDataAddress && (
-                <div className="success-box mb-6">
-                    <p className="font-semibold text-green-400">✅ Data Protected Successfully!</p>
-                    <div className="mt-2 text-sm">
-                        <p className="text-gray-300">Protected Data Address:</p>
-                        <button
-                            onClick={() => openInExplorer(protectedDataAddress, "dataset")}
-                            className="text-indigo-400 hover:text-indigo-300 font-mono break-all text-left"
-                        >
+            <div className="p-6">
+                {protectedDataAddress && (
+                    <div className="mb-6 p-4 border border-green-900/30 bg-green-900/10 text-green-400 text-xs font-mono">
+                        <div className="flex items-center mb-2">
+                            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            ENCRYPTION_COMPLETE
+                        </div>
+                        <div className="break-all opacity-80 cursor-pointer hover:underline" onClick={() => openInExplorer(protectedDataAddress, "dataset")}>
                             {protectedDataAddress}
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        Property Name
-                    </label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g., Downtown Apartment Building"
-                        className="input-field"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        Annual Yield (%)
-                    </label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        value={yieldValue}
-                        onChange={(e) => setYieldValue(e.target.value)}
-                        placeholder="e.g., 7.5"
-                        className="input-field"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        Occupancy Rate (%) - Optional
-                    </label>
-                    <input
-                        type="number"
-                        step="0.1"
-                        value={occupancy}
-                        onChange={(e) => setOccupancy(e.target.value)}
-                        placeholder="e.g., 94"
-                        className="input-field"
-                    />
-                </div>
-
-                {error && (
-                    <div className="error-box">
-                        <p className="text-red-400">{error}</p>
+                        </div>
                     </div>
                 )}
 
-                <button
-                    type="submit"
-                    disabled={isLoading || !name || !yieldValue}
-                    className="btn-primary w-full"
-                >
-                    {isLoading ? "Protecting..." : "🔐 Protect Data"}
-                </button>
-            </form>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-mono-small block">Asset Designation</label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="input-industrial"
+                            placeholder="e.g. BLDG_block_A"
+                            required
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-mono-small block">Yield (%)</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={yieldValue}
+                                onChange={(e) => setYieldValue(e.target.value)}
+                                className="input-industrial"
+                                placeholder="0.00"
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-mono-small block">Occupancy (%)</label>
+                            <input
+                                type="number"
+                                step="0.1"
+                                value={occupancy}
+                                onChange={(e) => setOccupancy(e.target.value)}
+                                className="input-industrial"
+                                placeholder="OPTIONAL"
+                            />
+                        </div>
+                    </div>
+
+                    {error && (
+                        <div className="text-xs text-red-500 font-mono pt-2">
+                            Error code: {error}
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={isLoading || !name || !yieldValue}
+                        className="btn-industrial w-full"
+                    >
+                        {isLoading ? "Encrypting..." : "Execute Protection"}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

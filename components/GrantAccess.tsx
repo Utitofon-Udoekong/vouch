@@ -17,7 +17,6 @@ export function GrantAccess() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!protectedDataAddress || !authorizedApp) return;
 
         const result = await grantAccess({
@@ -33,133 +32,110 @@ export function GrantAccess() {
         }
     };
 
-    if (!isConnected) {
-        return (
-            <div className="card">
-                <h3 className="card-title">🔓 Grant Access</h3>
-                <p className="text-gray-400">Connect your wallet to manage access to your protected data.</p>
-            </div>
-        );
-    }
-
-    if (!isInitialized) {
-        return (
-            <div className="card">
-                <h3 className="card-title">🔓 Grant Access</h3>
-                <p className="text-yellow-400">Initializing DataProtector...</p>
-            </div>
-        );
-    }
+    if (!isConnected) return null;
 
     return (
-        <div className="card">
-            <h3 className="card-title">🔓 Grant Access to Protected Data</h3>
-            <p className="text-gray-400 mb-6">
-                Allow specific apps and users to access your encrypted yield data.
-            </p>
-
-            {grantedAccess && (
-                <div className="success-box mb-6">
-                    <p className="font-semibold text-green-400">✅ Access Granted Successfully!</p>
-                    <div className="mt-2 text-sm space-y-1">
-                        <p><span className="text-gray-400">Dataset:</span> <span className="font-mono text-xs">{String(grantedAccess.dataset)}</span></p>
-                        <p><span className="text-gray-400">Price:</span> {String(grantedAccess.datasetprice)} nRLC</p>
-                        <p><span className="text-gray-400">Volume:</span> {String(grantedAccess.volume)}</p>
-                    </div>
+        <div className="border border-[#27272a] bg-[#09090b]">
+            {/* Header */}
+            <div className="border-b border-[#27272a] p-4 flex items-center justify-between bg-[#0c0c0e]">
+                <h3 className="text-sm font-medium text-white">Access Control</h3>
+                <div className="flex space-x-1">
+                    <div className="w-2 h-2 rounded-full bg-[#27272a]"></div>
+                    <div className="w-2 h-2 rounded-full bg-[#27272a]"></div>
                 </div>
-            )}
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        Protected Data Address
-                    </label>
-                    <input
-                        type="text"
-                        value={protectedDataAddress}
-                        onChange={(e) => setProtectedDataAddress(e.target.value)}
-                        placeholder="0x..."
-                        className="input-field font-mono"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        Authorized iApp Address
-                        <a
-                            href={getUrl("apps", "apps") || "#"}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="ml-2 text-indigo-400 hover:text-indigo-300 text-xs"
-                        >
-                            View Available iApps →
-                        </a>
-                    </label>
-                    <input
-                        type="text"
-                        value={authorizedApp}
-                        onChange={(e) => setAuthorizedApp(e.target.value)}
-                        placeholder="0x..."
-                        className="input-field font-mono"
-                        required
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                        Authorized User (optional, 0x0... for anyone)
-                    </label>
-                    <input
-                        type="text"
-                        value={authorizedUser}
-                        onChange={(e) => setAuthorizedUser(e.target.value)}
-                        placeholder="0x0000000000000000000000000000000000000000"
-                        className="input-field font-mono"
-                    />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                            Access Count
-                        </label>
-                        <input
-                            type="number"
-                            min="1"
-                            value={numberOfAccess}
-                            onChange={(e) => setNumberOfAccess(e.target.value)}
-                            className="input-field"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">
-                            Price (nRLC)
-                        </label>
-                        <input
-                            type="number"
-                            min="0"
-                            value={pricePerAccess}
-                            onChange={(e) => setPricePerAccess(e.target.value)}
-                            className="input-field"
-                        />
-                    </div>
-                </div>
-
-                {error && (
-                    <div className="error-box">
-                        <p className="text-red-400">{error}</p>
+            <div className="p-6">
+                {grantedAccess && (
+                    <div className="mb-6 p-4 border border-green-900/30 bg-green-900/10 text-green-400 text-xs font-mono">
+                        <div className="flex items-center mb-2">
+                            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            ACCESS_GRANTED
+                        </div>
+                        <div className="opacity-80">
+                            Dataset: {String(grantedAccess.dataset).substring(0, 10)}...<br />
+                            Price: {String(grantedAccess.datasetprice)} nRLC
+                        </div>
                     </div>
                 )}
 
-                <button
-                    type="submit"
-                    disabled={isLoading || !protectedDataAddress || !authorizedApp}
-                    className="btn-primary w-full"
-                >
-                    {isLoading ? "Granting Access..." : "🔓 Grant Access"}
-                </button>
-            </form>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-mono-small block">Protected Address</label>
+                        <input
+                            type="text"
+                            value={protectedDataAddress}
+                            onChange={(e) => setProtectedDataAddress(e.target.value)}
+                            className="input-industrial"
+                            placeholder="0x..."
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-mono-small flex items-center justify-between">
+                            <span>Authorized App</span>
+                            <a href={getUrl("apps", "apps") || "#"} target="_blank" className="text-[10px] text-gray-500 hover:text-white underline">VIEW APPS</a>
+                        </label>
+                        <input
+                            type="text"
+                            value={authorizedApp}
+                            onChange={(e) => setAuthorizedApp(e.target.value)}
+                            className="input-industrial"
+                            placeholder="0x..."
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-2">
+                        <label className="text-mono-small block">User Restriction (Opt)</label>
+                        <input
+                            type="text"
+                            value={authorizedUser}
+                            onChange={(e) => setAuthorizedUser(e.target.value)}
+                            className="input-industrial"
+                            placeholder="0x... (Empty for Any)"
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-mono-small block">Count</label>
+                            <input
+                                type="number"
+                                min="1"
+                                value={numberOfAccess}
+                                onChange={(e) => setNumberOfAccess(e.target.value)}
+                                className="input-industrial"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-mono-small block">Price (nRLC)</label>
+                            <input
+                                type="number"
+                                min="0"
+                                value={pricePerAccess}
+                                onChange={(e) => setPricePerAccess(e.target.value)}
+                                className="input-industrial"
+                            />
+                        </div>
+                    </div>
+
+                    {error && (
+                        <div className="text-xs text-red-500 font-mono pt-2">
+                            Error code: {error}
+                        </div>
+                    )}
+
+                    <button
+                        type="submit"
+                        disabled={isLoading || !protectedDataAddress || !authorizedApp}
+                        className="btn-industrial-outline w-full"
+                    >
+                        {isLoading ? "Authorizing..." : "Grant Permission"}
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }
