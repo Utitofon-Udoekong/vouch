@@ -71,8 +71,8 @@ pnpm dev
 
 ## 🌐 Networks
 
-- **iExec Bellecour** (chainId: 134) - Primary network for data protection
-- Uses xRLC for gas fees ([faucet](https://faucet.iex.ec/bellecour))
+- **iExec Arbitrum Sepolia Testnet** - Primary network for data protection
+- Get testnet RLC from the [Faucet](https://explorer.iex.ec/arbitrum-sepolia-testnet/account?accountTab=Faucet)
 
 ## 📁 Project Structure
 

@@ -1,37 +1,23 @@
 import { defineChain } from "viem";
+import { arbitrumSepolia } from "viem/chains";
 
-// iExec Bellecour Sidechain (mainnet for iExec)
-export const bellecour = defineChain({
-  id: 134,
-  name: "iExec Sidechain",
-  nativeCurrency: {
-    decimals: 18,
-    name: "xRLC",
-    symbol: "xRLC",
-  },
-  rpcUrls: {
-    default: {
-      http: ["https://bellecour.iex.ec"],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Blockscout",
-      url: "https://blockscout-bellecour.iex.ec",
-    },
-  },
+// iExec on Arbitrum Sepolia Testnet
+export const iexecArbitrumSepolia = defineChain({
+  ...arbitrumSepolia,
+  name: "iExec Arbitrum Sepolia",
+  // Override with iExec-specific settings if needed
 });
 
 // Export supported chains for the app
-export const supportedChains = [bellecour] as const;
+export const supportedChains = [iexecArbitrumSepolia] as const;
 
 // Explorer URL helpers
 export function getExplorerUrl(
   addressOrHash: string,
   type: "address" | "tx" | "dataset" | "apps" = "address"
 ): string | null {
-  const baseUrl = "https://explorer.iex.ec/bellecour";
-  
+  const baseUrl = "https://explorer.iex.ec/arbitrum-sepolia-testnet";
+
   switch (type) {
     case "address":
       return `${baseUrl}/address/${addressOrHash}`;

@@ -73,7 +73,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
                             <div>
                                 <div className="text-[10px] uppercase text-gray-500 mb-1">Network</div>
-                                <div className="text-sm font-medium text-white">iExec Bellecour</div>
+                                <div className="text-sm font-medium text-white">Arbitrum Sepolia</div>
                             </div>
                         </div>
 
@@ -86,8 +86,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                                     key={item.href}
                                     href={item.href}
                                     className={`block w-full text-left px-3 py-2 text-sm transition-colors ${isActive(item.href, item.exact)
-                                            ? "text-white bg-[#18181b] border border-[#27272a]"
-                                            : "text-gray-500 hover:text-white hover:bg-[#18181b]"
+                                        ? "text-white bg-[#18181b] border border-[#27272a]"
+                                        : "text-gray-500 hover:text-white hover:bg-[#18181b]"
                                         }`}
                                 >
                                     {item.label}

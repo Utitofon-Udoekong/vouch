@@ -1,6 +1,6 @@
 import { cookieStorage, createStorage } from "@wagmi/core";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
-import { bellecour } from "./chains";
+import { iexecArbitrumSepolia } from "./chains";
 import type { AppKitNetwork } from "@reown/appkit/networks";
 
 // Get projectId from environment
@@ -11,7 +11,7 @@ if (!projectId) {
 }
 
 // Supported networks - must be a tuple type for AppKit
-export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [bellecour];
+export const networks: [AppKitNetwork, ...AppKitNetwork[]] = [iexecArbitrumSepolia];
 
 // Wagmi adapter configuration
 export const wagmiAdapter = new WagmiAdapter({

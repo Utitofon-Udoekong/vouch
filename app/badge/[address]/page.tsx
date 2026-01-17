@@ -71,7 +71,7 @@ export default function PublicBadgePage({ params }: PageProps) {
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="text-gray-500">Network</span>
-                                    <span className="text-gray-400">iExec Bellecour</span>
+                                    <span className="text-gray-400">Arbitrum Sepolia</span>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@ export default function PublicBadgePage({ params }: PageProps) {
                                 Go to Dashboard
                             </Link>
                             <a
-                                href={`https://blockscout-bellecour.iex.ec/address/${address}`}
+                                href={`https://explorer.iex.ec/arbitrum-sepolia-testnet/address/${address}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="btn-industrial text-center"

@@ -52,7 +52,7 @@ export function useDataProtector(): UseDataProtectorReturn {
         setError(null);
       } catch (err) {
         console.error("Failed to initialize DataProtector:", err);
-        setError("Failed to initialize DataProtector. Make sure you're connected to iExec Bellecour.");
+        setError("Failed to initialize DataProtector. Make sure you're connected to Arbitrum Sepolia.");
       }
     } else {
       setDataProtector(null);
