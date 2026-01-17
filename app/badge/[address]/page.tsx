@@ -30,7 +30,7 @@ export default function PublicBadgePage({ params }: PageProps) {
                 <div className="flex h-16 items-center justify-between px-6">
                     <div className="flex items-center gap-4">
                         <Link href="/" className="w-10 h-10 border border-[#27272a] flex items-center justify-center hover:bg-[#18181b] transition-colors">
-                            <div className="w-4 h-4 bg-[#f4f4f5] transform rotate-45"></div>
+                            <img src="/logo.png" alt="Vouch Logo" className="w-5 h-5 object-contain" />
                         </Link>
                         <div className="h-6 w-[1px] bg-[#27272a]"></div>
                         <span className="font-mono text-sm text-gray-500">BADGE_VERIFICATION</span>

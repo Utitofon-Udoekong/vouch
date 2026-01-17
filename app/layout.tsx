@@ -20,7 +20,11 @@ export const metadata: Metadata = {
   title: "Vouch - Verified Yield Badge",
   description: "Privacy-preserving property income verification for DeFi lending",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/logo.png", type: "image/png" }
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 

@@ -45,7 +45,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         </svg>
                     </Link>
                     <div className="hidden lg:block h-6 w-[1px] bg-[#27272a]"></div>
-                    <span className="font-mono text-sm text-gray-400">DASHBOARD // <span className="text-white">VOUCH</span></span>
+                    <div className="flex items-center gap-2">
+                        <img src="/logo.png" alt="Vouch Logo" className="w-5 h-5 object-contain" />
+                        <span className="font-mono text-sm text-gray-400">DASHBOARD // <span className="text-white">VOUCH</span></span>
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-2 lg:gap-4">
@@ -102,8 +105,8 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                     <div className="max-w-5xl mx-auto">
                         {!isConnected ? (
                             <div className="min-h-[400px] flex flex-col items-center justify-center border border-[#27272a] bg-[#0c0c0e] p-8 lg:p-12 text-center">
-                                <div className="w-16 h-16 border border-[#27272a] rounded-full flex items-center justify-center mb-6">
-                                    <div className="w-4 h-4 bg-[#27272a]"></div>
+                                <div className="w-16 h-16 border border-[#27272a] flex items-center justify-center mb-6">
+                                    <img src="/logo.png" alt="Vouch Logo" className="w-8 h-8 object-contain" />
                                 </div>
                                 <h2 className="text-xl font-medium text-white mb-2">Authentication Required</h2>
                                 <p className="text-gray-500 max-w-sm mb-8">Connect your wallet to access the Vouch dashboard.</p>

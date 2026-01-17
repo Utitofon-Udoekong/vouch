@@ -11,9 +11,9 @@ export default function Home() {
       <nav className="border-b border-[#27272a] bg-[#09090b] sticky top-0 z-50">
         <div className="flex h-16 items-center">
           {/* Logo / Brand */}
-          <div className="w-16 h-16 flex items-center justify-center border-r border-[#27272a]">
-            <div className="w-6 h-6 bg-[#f4f4f5] transform rotate-45"></div>
-          </div>
+          <Link href="/" className="w-16 h-16 flex items-center justify-center border-r border-[#27272a] hover:bg-[#18181b] transition-colors">
+            <img src="/logo.png" alt="Vouch Logo" className="w-8 h-8 object-contain" />
+          </Link>
 
           <div className="flex-1 px-8 flex items-center justify-between">
             <div className="flex space-x-8">
