@@ -1,125 +1,96 @@
 "use client";
 
-import { ConnectButton, NetworkButton } from "@/components/ConnectButton";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import { ProtectData } from "@/components/ProtectData";
-import { GrantAccess } from "@/components/GrantAccess";
 import { ProtectedDataList } from "@/components/ProtectedDataList";
-import { useAccount } from "wagmi";
+import { GrantAccess } from "@/components/GrantAccess";
 import Link from "next/link";
 
 export default function Dashboard() {
-    const { isConnected } = useAccount();
-
     return (
-        <div className="min-h-screen bg-[#09090b] selection:bg-[#ea580c] selection:text-white">
-
-            {/* Top Bar - Minimal */}
-            <nav className="h-16 border-b border-[#27272a] bg-[#09090b] flex items-center justify-between px-6 sticky top-0 z-50">
-                <div className="flex items-center gap-4">
-                    <Link href="/" className="w-10 h-10 border border-[#27272a] flex items-center justify-center hover:bg-[#18181b] transition-colors">
-                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </Link>
-                    <div className="h-6 w-[1px] bg-[#27272a]"></div>
-                    <span className="font-mono text-sm text-gray-400">DASHBOARD_VIEW // <span className="text-white">MAIN</span></span>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <NetworkButton />
-                    <ConnectButton />
-                </div>
-            </nav>
-
-            <div className="flex h-[calc(100vh-64px)] overflow-hidden">
-
-                {/* Sidebar - Fixed width */}
-                <aside className="w-64 border-r border-[#27272a] bg-[#0c0c0e] hidden lg:block overflow-y-auto">
-                    <div className="p-6">
-                        <h4 className="text-mono-small mb-4">Account Overview</h4>
-
-                        <div className="space-y-4 mb-8">
-                            <div>
-                                <div className="text-[10px] uppercase text-gray-500 mb-1">Status</div>
-                                <div className="flex items-center space-x-2">
-                                    <span className={`status-dot ${isConnected ? "bg-green-500" : "bg-red-500"}`}></span>
-                                    <span className="text-sm font-medium text-white">{isConnected ? "Connected" : "Offline"}</span>
-                                </div>
-                            </div>
-
-                            <div>
-                                <div className="text-[10px] uppercase text-gray-500 mb-1">Network</div>
-                                <div className="text-sm font-medium text-white">iExec Bellecour</div>
-                            </div>
-                        </div>
-
-                        <div className="section-divider mb-8"></div>
-
-                        <h4 className="text-mono-small mb-4">Navigation</h4>
-                        <div className="space-y-1">
-                            <button className="w-full text-left px-3 py-2 text-sm text-white bg-[#18181b] border border-[#27272a]">Overview</button>
-                            <button className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:text-white transition-colors">Yield Data</button>
-                            <button className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:text-white transition-colors">Permissions</button>
-                            <button className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:text-white transition-colors">Logs</button>
-                        </div>
-                    </div>
-                </aside>
-
-                {/* Main Content Area */}
-                <main className="flex-1 overflow-y-auto bg-[#09090b] p-6 lg:p-12">
-
-                    <div className="max-w-5xl mx-auto">
-                        {!isConnected ? (
-                            <div className="min-h-[400px] flex flex-col items-center justify-center border border-[#27272a] bg-[#0c0c0e] p-12 text-center">
-                                <div className="w-16 h-16 border border-[#27272a] rounded-full flex items-center justify-center mb-6">
-                                    <div className="w-4 h-4 bg-[#27272a]"></div>
-                                </div>
-                                <h2 className="text-xl font-medium text-white mb-2">Authentication Required</h2>
-                                <p className="text-gray-500 max-w-sm mb-8">Please verify your session by connecting your wallet to the iExec protocol.</p>
-                                <ConnectButton />
-                            </div>
-                        ) : (
-                            <div className="space-y-12">
-                                {/* Module 1: Yield Assets */}
-                                <section>
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h2 className="text-xl font-medium text-white">Yield Assets</h2>
-                                        <button className="text-mono-small hover:text-white transition-colors">View All Assets &rarr;</button>
-                                    </div>
-
-                                    <div className="grid lg:grid-cols-2 gap-8">
-                                        <ProtectData />
-                                        <ProtectedDataList />
-                                    </div>
-                                </section>
-
-                                <div className="section-divider"></div>
-
-                                {/* Module 2 */}
-                                <section>
-                                    <h2 className="text-xl font-medium text-white mb-6">Access Control</h2>
-                                    <div className="grid lg:grid-cols-3 gap-8">
-                                        <div className="lg:col-span-1">
-                                            <p className="text-sm text-gray-400 leading-relaxed mb-6">
-                                                Manage granular permissions for your protected datasets.
-                                                Authorize specific dApps or wallet addresses to compute on your encrypted yield data without revealing the raw inputs.
-                                            </p>
-                                            <div className="p-4 border border-[#27272a] bg-[#0c0c0e]">
-                                                <div className="text-mono-small mb-2">Active Grants</div>
-                                                <div className="text-2xl font-medium text-white">0</div>
-                                            </div>
-                                        </div>
-                                        <div className="lg:col-span-2">
-                                            <GrantAccess />
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-                        )}
+        <DashboardLayout>
+            <div className="space-y-12">
+                {/* Module 1: Yield Assets */}
+                <section>
+                    <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-xl font-medium text-white">Yield Assets</h2>
+                        <Link href="/dashboard/badges" className="text-mono-small hover:text-white transition-colors">
+                            View All Badges &rarr;
+                        </Link>
                     </div>
 
-                </main>
+                    <div className="grid lg:grid-cols-2 gap-8">
+                        <ProtectData />
+                        <ProtectedDataList />
+                    </div>
+                </section>
+
+                <div className="section-divider"></div>
+
+                {/* Module 2: Access Control */}
+                <section>
+                    <h2 className="text-xl font-medium text-white mb-6">Access Control</h2>
+                    <div className="grid lg:grid-cols-3 gap-8">
+                        <div className="lg:col-span-1">
+                            <p className="text-sm text-gray-400 leading-relaxed mb-6">
+                                Manage granular permissions for your protected datasets.
+                                Authorize specific dApps or wallet addresses to compute on your encrypted yield data without revealing the raw inputs.
+                            </p>
+                            <div className="p-4 border border-[#27272a] bg-[#0c0c0e]">
+                                <div className="text-mono-small mb-2">Active Grants</div>
+                                <div className="text-2xl font-medium text-white">0</div>
+                            </div>
+                        </div>
+                        <div className="lg:col-span-2">
+                            <GrantAccess />
+                        </div>
+                    </div>
+                </section>
+
+                <div className="section-divider"></div>
+
+                {/* Quick Actions */}
+                <section>
+                    <h2 className="text-xl font-medium text-white mb-6">Quick Actions</h2>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <Link
+                            href="/dashboard/loans"
+                            className="p-6 border border-[#27272a] bg-[#0c0c0e] hover:bg-[#18181b] transition-colors group"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 border border-[#27272a] flex items-center justify-center group-hover:border-white transition-colors">
+                                    <svg className="w-5 h-5 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="square" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <svg className="w-4 h-4 text-gray-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="square" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                            <h3 className="text-sm font-medium text-white mb-1">DeFi Loans</h3>
+                            <p className="text-xs text-gray-500">Use your badges as collateral</p>
+                        </Link>
+
+                        <Link
+                            href="/dashboard/badges"
+                            className="p-6 border border-[#27272a] bg-[#0c0c0e] hover:bg-[#18181b] transition-colors group"
+                        >
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-10 h-10 border border-[#27272a] flex items-center justify-center group-hover:border-white transition-colors">
+                                    <svg className="w-5 h-5 text-gray-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="square" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <svg className="w-4 h-4 text-gray-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="square" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </div>
+                            <h3 className="text-sm font-medium text-white mb-1">My Badges</h3>
+                            <p className="text-xs text-gray-500">View verified yield credentials</p>
+                        </Link>
+                    </div>
+                </section>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }

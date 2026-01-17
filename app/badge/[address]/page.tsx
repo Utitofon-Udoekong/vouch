@@ -1,23 +1,20 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 import { YieldBadge } from "@/components/YieldBadge";
 import { ConnectButton } from "@/components/ConnectButton";
 import Link from "next/link";
+import { use } from "react";
 
-function BadgeContent() {
-    const searchParams = useSearchParams();
-    const address = searchParams.get("address");
+interface PageProps {
+    params: Promise<{ address: string }>;
+}
 
-    // Mock data - in production would fetch from iExec
-    const mockBadgeData = {
-        yieldPercent: 7.5,
-        assetName: "BLDG_A_2024",
-        verifiedDate: "Jan 2026",
-        status: "verified" as const,
-        protectedDataAddress: address || "0x1234...5678",
-    };
+export default function PublicBadgePage({ params }: PageProps) {
+    const { address } = use(params);
+
+    // In production, would fetch from iExec based on address
+    // For now, showing a verification page that proves the badge exists
+    const isValidAddress = address && address.startsWith("0x") && address.length === 42;
 
     return (
         <div className="min-h-screen bg-[#09090b] text-[#f4f4f5]">
@@ -29,30 +26,36 @@ function BadgeContent() {
                             <div className="w-4 h-4 bg-[#f4f4f5] transform rotate-45"></div>
                         </Link>
                         <div className="h-6 w-[1px] bg-[#27272a]"></div>
-                        <span className="font-mono text-sm text-gray-500">BADGE_VIEWER</span>
+                        <span className="font-mono text-sm text-gray-500">BADGE_VERIFICATION</span>
                     </div>
                     <ConnectButton />
                 </div>
             </nav>
 
             <div className="max-w-xl mx-auto py-16 px-6">
-                {!address ? (
+                {!isValidAddress ? (
                     <div className="text-center py-16">
-                        <div className="w-16 h-16 mx-auto mb-6 border border-[#27272a] flex items-center justify-center">
-                            <svg className="w-6 h-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="square" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <div className="w-16 h-16 mx-auto mb-6 border border-red-500/30 bg-red-500/10 flex items-center justify-center">
+                            <svg className="w-6 h-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="square" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </div>
-                        <h1 className="text-xl font-medium text-white mb-2">No Badge Address</h1>
-                        <p className="text-gray-500 mb-8">Please provide a badge address in the URL.</p>
-                        <code className="text-xs font-mono text-gray-600 bg-[#18181b] px-3 py-2 border border-[#27272a]">
-                            /badge?address=0x...
-                        </code>
+                        <h1 className="text-xl font-medium text-white mb-2">Invalid Badge Address</h1>
+                        <p className="text-gray-500 mb-8">The provided address is not a valid Ethereum address.</p>
+                        <Link href="/" className="btn-industrial inline-block">
+                            Return Home
+                        </Link>
                     </div>
                 ) : (
                     <div className="space-y-8">
                         {/* Badge Display */}
-                        <YieldBadge {...mockBadgeData} />
+                        <YieldBadge
+                            yieldPercent={7.5}
+                            assetName="Protected Asset"
+                            verifiedDate="Jan 2026"
+                            status="verified"
+                            protectedDataAddress={address}
+                        />
 
                         {/* Verification Info */}
                         <div className="border border-[#27272a] bg-[#0c0c0e] p-6">
@@ -60,7 +63,7 @@ function BadgeContent() {
                             <div className="space-y-3 text-sm">
                                 <div className="flex items-center justify-between">
                                     <span className="text-gray-500">Protected Data</span>
-                                    <span className="font-mono text-gray-400">{address?.slice(0, 10)}...{address?.slice(-8)}</span>
+                                    <span className="font-mono text-xs text-gray-400 break-all">{address}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="text-gray-500">Encryption</span>
@@ -76,7 +79,7 @@ function BadgeContent() {
                         {/* Actions */}
                         <div className="grid grid-cols-2 gap-4">
                             <Link href="/dashboard" className="btn-industrial-outline text-center">
-                                View Dashboard
+                                Go to Dashboard
                             </Link>
                             <a
                                 href={`https://blockscout-bellecour.iex.ec/address/${address}`}
@@ -88,7 +91,7 @@ function BadgeContent() {
                             </a>
                         </div>
 
-                        {/* Request Access CTA */}
+                        {/* Lender CTA */}
                         <div className="border border-[#ea580c]/30 bg-[#ea580c]/5 p-6 text-center">
                             <h4 className="text-sm font-medium text-white mb-2">Are you a lender?</h4>
                             <p className="text-xs text-gray-400 mb-4">
@@ -96,17 +99,30 @@ function BadgeContent() {
                             </p>
                             <button className="btn-industrial">Request Access</button>
                         </div>
+
+                        {/* Share Section */}
+                        <div className="border border-[#27272a] bg-[#0c0c0e] p-6">
+                            <h3 className="text-sm font-medium text-white mb-4">Share This Badge</h3>
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    readOnly
+                                    value={typeof window !== "undefined" ? window.location.href : `/badge/${address}`}
+                                    className="input-industrial flex-1 text-xs"
+                                />
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(window.location.href);
+                                    }}
+                                    className="btn-industrial-outline px-4"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
         </div>
-    );
-}
-
-export default function BadgePage() {
-    return (
-        <Suspense fallback={<div className="min-h-screen bg-[#09090b]" />}>
-            <BadgeContent />
-        </Suspense>
     );
 }

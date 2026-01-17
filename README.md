@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vouch
 
-## Getting Started
+**Verified Yield Badge + DeFi Loan Integration**
 
-First, run the development server:
+A privacy-preserving platform that enables real-world asset owners to prove their yield performance without exposing sensitive data, using iExec's Trusted Execution Environment (TEE) technology.
+
+## 🏆 Hack4Privacy Hackathon Submission
+
+### Problem
+
+Real estate and RWA owners cannot easily prove their asset yield to DeFi lenders without exposing sensitive financial data. This creates a barrier between traditional finance and on-chain capital.
+
+### Solution
+
+Vouch bridges this gap by:
+1. **Encrypting yield data** using iExec DataProtector (TEE)
+2. **Generating verifiable badges** that prove yield without exposing raw data
+3. **Enabling DeFi loans** based on verified yield credentials
+
+## 🚀 Features
+
+- **Data Protection**: Encrypt sensitive yield data with iExec TEE
+- **Yield Badges**: Generate verifiable credentials for your assets
+- **Access Control**: Grant/revoke lender access to verify badges
+- **DeFi Integration**: Mock loan eligibility based on verified yields
+
+## 🛠 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Next.js 16 | React framework |
+| iExec DataProtector | TEE-based encryption |
+| Reown AppKit | Wallet connection |
+| Wagmi v3 | Ethereum hooks |
+| Tailwind CSS v4 | Styling |
+
+## 📦 Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repository
+git clone https://github.com/your-username/vouch.git
+cd vouch
+
+# Install dependencies
+pnpm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your NEXT_PUBLIC_REOWN_PROJECT_ID from cloud.reown.com
+
+# Run development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔗 Routes
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Description |
+|-------|-------------|
+| `/` | Landing page |
+| `/dashboard` | Overview + Data protection |
+| `/dashboard/badges` | View yield badges |
+| `/dashboard/loans` | DeFi loan dashboard |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔐 How It Works
 
-## Learn More
+1. **Connect Wallet**: Connect to iExec Bellecour network
+2. **Protect Data**: Encrypt your yield data using the dashboard
+3. **Create Badge**: Generate a verifiable yield credential
+4. **Share with Lenders**: Grant access to your protected data
+5. **Get Loans**: Use badges as collateral for DeFi loans
 
-To learn more about Next.js, take a look at the following resources:
+## 🌐 Networks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **iExec Bellecour** (chainId: 134) - Primary network for data protection
+- Uses xRLC for gas fees ([faucet](https://faucet.iex.ec/bellecour))
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Project Structure
 
-## Deploy on Vercel
+```
+vouch/
+├── app/
+│   ├── page.tsx           # Landing page
+│   ├── dashboard/         # Main dashboard
+│   ├── badge/             # Badge viewer
+│   └── loans/             # DeFi loans
+├── components/
+│   ├── ProtectData.tsx    # Encryption form
+│   ├── GrantAccess.tsx    # Access management
+│   ├── YieldBadge.tsx     # Badge display
+│   └── LoanEligibility.tsx # Loan assessment
+├── hooks/
+│   └── useDataProtector.ts # iExec integration
+└── config/
+    ├── chains.ts          # Network config
+    └── appkit.ts          # Wallet config
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🧪 Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Build verification
+pnpm run build
+
+# Development server
+pnpm dev
+```
+
+## 📄 License
+
+MIT
+
+---
+
+Built for [Hack4Privacy](https://hack4privacy.eu) 🏴‍☠️

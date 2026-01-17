@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { IExecDataProtector, type ProtectedData, type DataObject } from "@iexec/dataprotector";
 import { EIP1193Provider } from "viem";
 
@@ -36,7 +36,7 @@ declare global {
 }
 
 export function useDataProtector(): UseDataProtectorReturn {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useConnection();
   const [dataProtector, setDataProtector] = useState<IExecDataProtector | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

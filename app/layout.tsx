@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { headers } from "next/headers";
 import { Web3Provider } from "@/context/Web3Provider";
+import { ToastProvider } from "@/components/Toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,7 +37,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Web3Provider cookies={cookies}>
-          {children}
+          <ToastProvider>
+            {children}
+          </ToastProvider>
         </Web3Provider>
       </body>
     </html>
