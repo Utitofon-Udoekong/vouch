@@ -4,6 +4,7 @@ import { YieldBadge } from "@/components/YieldBadge";
 import { ConnectButton } from "@/components/ConnectButton";
 import Link from "next/link";
 import { use } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface PageProps {
     params: Promise<{ address: string }>;
@@ -11,6 +12,12 @@ interface PageProps {
 
 export default function PublicBadgePage({ params }: PageProps) {
     const { address } = use(params);
+    const searchParams = useSearchParams();
+
+    // Read badge data from URL params (passed from badges page)
+    const assetName = searchParams.get("name") || "Protected Asset";
+    const yieldPercent = parseFloat(searchParams.get("yield") || "0");
+    const verifiedDate = searchParams.get("date") || "Jan 2026";
 
     // In production, would fetch from iExec based on address
     // For now, showing a verification page that proves the badge exists
@@ -32,7 +39,7 @@ export default function PublicBadgePage({ params }: PageProps) {
                 </div>
             </nav>
 
-            <div className="max-w-xl mx-auto py-16 px-6">
+            <div className="max-w-2xl mx-auto py-16 px-6">
                 {!isValidAddress ? (
                     <div className="text-center py-16">
                         <div className="w-16 h-16 mx-auto mb-6 border border-red-500/30 bg-red-500/10 flex items-center justify-center">
@@ -50,9 +57,9 @@ export default function PublicBadgePage({ params }: PageProps) {
                     <div className="space-y-8">
                         {/* Badge Display */}
                         <YieldBadge
-                            yieldPercent={7.5}
-                            assetName="Protected Asset"
-                            verifiedDate="Jan 2026"
+                            yieldPercent={yieldPercent}
+                            assetName={assetName}
+                            verifiedDate={verifiedDate}
                             status="verified"
                             protectedDataAddress={address}
                         />

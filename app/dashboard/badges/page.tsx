@@ -3,14 +3,14 @@
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { YieldBadge } from "@/components/YieldBadge";
 import { useDataProtector } from "@/hooks/useDataProtector";
-import { useExplorerUrl } from "@/hooks/useExplorerUrl";
 import { useProtectedData } from "@/context/ProtectedDataContext";
+import { parseYieldFromName } from "@/utils/yieldParser";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function BadgesPage() {
     const { isConnected } = useDataProtector();
     const { protectedData, isLoading, refreshData } = useProtectedData();
-    const { openInExplorer } = useExplorerUrl();
 
     useEffect(() => {
         if (isConnected && protectedData.length === 0) {
@@ -27,6 +27,15 @@ export default function BadgesPage() {
             month: "short",
             year: "numeric",
         });
+    };
+
+    const getBadgeUrl = (address: string, assetName: string, yieldPercent: number | null, timestamp: number) => {
+        const params = new URLSearchParams({
+            name: assetName,
+            yield: String(yieldPercent ?? 0),
+            date: formatDate(timestamp),
+        });
+        return `/dashboard/badges/${address}?${params.toString()}`;
     };
 
     return (
@@ -62,23 +71,31 @@ export default function BadgesPage() {
                         <p className="text-gray-500 mb-6">
                             Create your first yield badge by protecting your asset data.
                         </p>
-                        <a href="/dashboard" className="btn-industrial inline-block">
+                        <Link href="/dashboard" className="btn-industrial inline-block">
                             Protect Data
-                        </a>
+                        </Link>
                     </div>
                 ) : (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {protectedData.map((data) => (
-                            <YieldBadge
-                                key={data.address}
-                                yieldPercent={7.5} // Would come from decrypted data
-                                assetName={data.name || "Unnamed Asset"}
-                                verifiedDate={formatDate(data.creationTimestamp)}
-                                status="verified"
-                                protectedDataAddress={data.address}
-                                onClick={() => openInExplorer(data.address, "dataset")}
-                            />
-                        ))}
+                        {protectedData
+                            .filter((data) => data.name?.includes("|")) // Only show badges with yield metadata
+                            .map((data) => {
+                                const { assetName, yieldPercent } = parseYieldFromName(data.name);
+                                return (
+                                    <Link
+                                        key={data.address}
+                                        href={getBadgeUrl(data.address, assetName, yieldPercent, data.creationTimestamp)}
+                                    >
+                                        <YieldBadge
+                                            yieldPercent={yieldPercent ?? 0}
+                                            assetName={assetName}
+                                            verifiedDate={formatDate(data.creationTimestamp)}
+                                            status="verified"
+                                            protectedDataAddress={data.address}
+                                        />
+                                    </Link>
+                                );
+                            })}
                     </div>
                 )}
 

@@ -5,7 +5,8 @@ import { LoanEligibility } from "@/components/LoanEligibility";
 import { LoanRequestForm } from "@/components/LoanRequestForm";
 import { useDataProtector } from "@/hooks/useDataProtector";
 import { useProtectedData } from "@/context/ProtectedDataContext";
-import { useState, useEffect, useMemo } from "react";
+import { parseYieldFromName } from "@/utils/yieldParser";
+import { useEffect, useMemo } from "react";
 
 export default function LoansPage() {
     const { isConnected } = useDataProtector();
@@ -18,13 +19,18 @@ export default function LoansPage() {
     }, [isConnected, protectedData.length, refreshData]);
 
     const badges = useMemo(() => {
-        return protectedData.map((data) => ({
-            address: data.address,
-            yieldPercent: 7.5, // Would come from decrypted data
-            assetName: data.name || "Unnamed Asset",
-            status: "verified" as const,
-            collateralValue: 25000, // Would come from oracle or user input
-        }));
+        return protectedData
+            .filter((data) => data.name?.includes("|")) // Only show badges with yield metadata
+            .map((data) => {
+                const { assetName, yieldPercent } = parseYieldFromName(data.name);
+                return {
+                    address: data.address,
+                    yieldPercent: yieldPercent ?? 0,
+                    assetName,
+                    status: "verified" as const,
+                    collateralValue: 25000, // Would come from oracle or user input
+                };
+            });
     }, [protectedData]);
 
     return (

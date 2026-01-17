@@ -29,7 +29,9 @@ export function ProtectData() {
             data.occupancyPercent = parseFloat(occupancy);
         }
 
-        const result = await protectData({ name, data });
+        // Encode yield in name for display (format: "AssetName|yield%")
+        const encodedName = `${name}|${yieldValue}%`;
+        const result = await protectData({ name: encodedName, data });
 
         if (result) {
             setProtectedDataAddress(result.address);
