@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useDataProtector, type DataObject } from "@/hooks/useDataProtector";
 import { useExplorerUrl } from "@/hooks/useExplorerUrl";
+import { useProtectedData } from "@/context/ProtectedDataContext";
 
 export function ProtectData() {
-    const { isConnected, isInitialized, isLoading, error, protectData } = useDataProtector();
+    const { isConnected, isLoading, error, protectData } = useDataProtector();
+    const { refreshData } = useProtectedData();
     const { openInExplorer } = useExplorerUrl();
 
     const [name, setName] = useState("");
@@ -34,6 +36,8 @@ export function ProtectData() {
             setName("");
             setYieldValue("");
             setOccupancy("");
+            // Refresh shared data context
+            await refreshData();
         }
     };
 

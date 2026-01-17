@@ -63,16 +63,15 @@ pnpm dev
 
 ## 🔐 How It Works
 
-1. **Connect Wallet**: Connect to iExec Bellecour network
+1. **Connect Wallet**: Connect to iExec Arbitrum Sepolia network
 2. **Protect Data**: Encrypt your yield data using the dashboard
 3. **Create Badge**: Generate a verifiable yield credential
 4. **Share with Lenders**: Grant access to your protected data
 5. **Get Loans**: Use badges as collateral for DeFi loans
 
-## 🌐 Networks
-
-- **iExec Arbitrum Sepolia Testnet** - Primary network for data protection
-- Get testnet RLC from the [Faucet](https://explorer.iex.ec/arbitrum-sepolia-testnet/account?accountTab=Faucet)
+- **iExec Arbitrum Sepolia Testnet** (chainId: 421614) - Debugging network
+- Uses Sepolia ETH for gas fees
+- Requires [Faucet RLC](https://explorer.iex.ec/arbitrum-sepolia-testnet/account?accountTab=Faucet)
 
 ## 📁 Project Structure
 

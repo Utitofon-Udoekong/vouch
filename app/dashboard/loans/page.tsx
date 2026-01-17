@@ -4,45 +4,28 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { LoanEligibility } from "@/components/LoanEligibility";
 import { LoanRequestForm } from "@/components/LoanRequestForm";
 import { useDataProtector } from "@/hooks/useDataProtector";
-import { useState, useEffect } from "react";
+import { useProtectedData } from "@/context/ProtectedDataContext";
+import { useState, useEffect, useMemo } from "react";
 
 export default function LoansPage() {
-    const { isConnected, fetchProtectedData } = useDataProtector();
-    const [badges, setBadges] = useState<Array<{
-        address: string;
-        yieldPercent: number;
-        assetName: string;
-        status: "verified" | "pending" | "expired";
-        collateralValue: number;
-    }>>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const { isConnected } = useDataProtector();
+    const { protectedData, isLoading, refreshData } = useProtectedData();
 
     useEffect(() => {
-        if (isConnected) {
-            loadBadges();
+        if (isConnected && protectedData.length === 0) {
+            refreshData();
         }
-    }, [isConnected]);
+    }, [isConnected, protectedData.length, refreshData]);
 
-    const loadBadges = async () => {
-        setIsLoading(true);
-        try {
-            const protectedData = await fetchProtectedData();
-            // Transform protected data into badge format
-            // In production, would decrypt and parse the actual yield data
-            const transformedBadges = protectedData.map((data) => ({
-                address: data.address,
-                yieldPercent: 7.5, // Would come from decrypted data
-                assetName: data.name || "Unnamed Asset",
-                status: "verified" as const,
-                collateralValue: 25000, // Would come from oracle or user input
-            }));
-            setBadges(transformedBadges);
-        } catch (err) {
-            console.error("Failed to load badges:", err);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const badges = useMemo(() => {
+        return protectedData.map((data) => ({
+            address: data.address,
+            yieldPercent: 7.5, // Would come from decrypted data
+            assetName: data.name || "Unnamed Asset",
+            status: "verified" as const,
+            collateralValue: 25000, // Would come from oracle or user input
+        }));
+    }, [protectedData]);
 
     return (
         <DashboardLayout>

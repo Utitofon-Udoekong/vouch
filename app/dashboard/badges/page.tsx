@@ -4,31 +4,22 @@ import { DashboardLayout } from "@/components/DashboardLayout";
 import { YieldBadge } from "@/components/YieldBadge";
 import { useDataProtector } from "@/hooks/useDataProtector";
 import { useExplorerUrl } from "@/hooks/useExplorerUrl";
-import { useState, useEffect } from "react";
-import type { ProtectedData } from "@iexec/dataprotector";
+import { useProtectedData } from "@/context/ProtectedDataContext";
+import { useEffect } from "react";
 
 export default function BadgesPage() {
-    const { isConnected, fetchProtectedData } = useDataProtector();
+    const { isConnected } = useDataProtector();
+    const { protectedData, isLoading, refreshData } = useProtectedData();
     const { openInExplorer } = useExplorerUrl();
-    const [protectedData, setProtectedData] = useState<ProtectedData[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if (isConnected) {
-            loadBadges();
+        if (isConnected && protectedData.length === 0) {
+            refreshData();
         }
-    }, [isConnected]);
+    }, [isConnected, protectedData.length, refreshData]);
 
     const loadBadges = async () => {
-        setIsLoading(true);
-        try {
-            const data = await fetchProtectedData();
-            setProtectedData(data);
-        } catch (err) {
-            console.error("Failed to load badges:", err);
-        } finally {
-            setIsLoading(false);
-        }
+        await refreshData();
     };
 
     const formatDate = (timestamp: number) => {

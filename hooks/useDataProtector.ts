@@ -48,6 +48,7 @@ export function useDataProtector(): UseDataProtectorReturn {
         // Cast to any to satisfy iExec SDK which expects a different provider shape
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const dp = new IExecDataProtector(window.ethereum as any);
+        console.log("DataProtector initialized successfully");
         setDataProtector(dp);
         setError(null);
       } catch (err) {
@@ -71,15 +72,20 @@ export function useDataProtector(): UseDataProtectorReturn {
       setError(null);
 
       try {
+        console.log("Protecting data:", params.name, params.data);
         const protectedData = await dataProtector.core.protectData({
           name: params.name,
           data: params.data,
         });
+        console.log("Data protected successfully:", protectedData.address);
         return protectedData;
       } catch (err) {
         const message = err instanceof Error ? err.message : "Failed to protect data";
         setError(message);
         console.error("Error protecting data:", err);
+        if (err && typeof err === 'object' && 'cause' in err) {
+            console.error("Cause of error:", (err as any).cause);
+        }
         return null;
       } finally {
         setIsLoading(false);

@@ -1,34 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useDataProtector } from "@/hooks/useDataProtector";
 import { useExplorerUrl } from "@/hooks/useExplorerUrl";
-import type { ProtectedData } from "@iexec/dataprotector";
+import { useProtectedData } from "@/context/ProtectedDataContext";
+import { useEffect } from "react";
 
 export function ProtectedDataList() {
-    const { isConnected, isInitialized, fetchProtectedData } = useDataProtector();
+    const { isConnected } = useDataProtector();
+    const { protectedData, isLoading, error, refreshData } = useProtectedData();
     const { openInExplorer } = useExplorerUrl();
-    const [protectedData, setProtectedData] = useState<ProtectedData[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (isConnected && isInitialized) {
-            loadData();
+        if (isConnected && protectedData.length === 0) {
+            refreshData();
         }
-    }, [isConnected, isInitialized]);
+    }, [isConnected, protectedData.length, refreshData]);
 
     const loadData = async () => {
-        setIsLoading(true);
-        setError(null);
-        try {
-            const data = await fetchProtectedData();
-            setProtectedData(data);
-        } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to load data");
-        } finally {
-            setIsLoading(false);
-        }
+        await refreshData();
     };
 
     const formatDate = (timestamp: number) => {

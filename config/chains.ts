@@ -5,7 +5,21 @@ import { arbitrumSepolia } from "viem/chains";
 export const iexecArbitrumSepolia = defineChain({
   ...arbitrumSepolia,
   name: "iExec Arbitrum Sepolia",
-  // Override with iExec-specific settings if needed
+  rpcUrls: {
+    default: {
+      http: [`https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || ''}`],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "iExec Explorer",
+      url: "https://explorer.iex.ec/arbitrum-sepolia-testnet",
+    },
+    arbitrum: {
+      name: "Arbiscan",
+      url: "https://sepolia.arbiscan.io",
+    }
+  },
 });
 
 // Export supported chains for the app
