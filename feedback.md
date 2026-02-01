@@ -48,6 +48,12 @@ This document provides feedback on the iExec developer tools used in building Vo
 - Some SDK errors are generic and don't indicate the root cause.
 - **Suggestion**: More descriptive error messages with suggested fixes.
 
+### Gas Price Estimation on Arbitrum Sepolia
+- The SDK uses a fixed `maxFeePerGas` (~20 gwei) that can be lower than the network's `baseFee` during congestion.
+- This causes transactions to fail with: `max fee per gas less than block base fee`.
+- The SDK doesn't expose gas configuration, so developers can't adjust it.
+- **Suggestion**: Allow gas price overrides or implement dynamic gas estimation based on current network conditions.
+
 ---
 
 ## Feature Requests 💡
