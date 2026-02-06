@@ -26,6 +26,30 @@ interface UseDataProtectorReturn {
   protectData: (params: ProtectDataParams) => Promise<ProtectedData | null>;
   grantAccess: (params: GrantAccessParams) => Promise<unknown>;
   fetchProtectedData: () => Promise<ProtectedData[]>;
+  processProtectedData: (params: ProcessProtectedDataParams) => Promise<VerificationResult | null>;
+}
+
+interface ProcessProtectedDataParams {
+  protectedDataAddress: string;
+  appAddress: string;
+  maxPrice?: number;
+}
+
+export interface VerificationResult {
+  verified: boolean;
+  yieldPercent?: number;
+  yieldTier?: 'PREMIUM' | 'STANDARD' | 'BASIC';
+  validationResults?: {
+    hasYieldData: boolean;
+    yieldInRange: boolean;
+    hasTimestamp: boolean;
+    hasType: boolean;
+  };
+  verifiedAt?: string;
+  verifierVersion?: string;
+  enclave?: string;
+  dataHash?: string;
+  error?: string;
 }
 
 // Extend Window interface for ethereum provider
@@ -150,6 +174,56 @@ export function useDataProtector(): UseDataProtectorReturn {
     }
   }, [dataProtector, address]);
 
+  // Process protected data through TEE verification app
+  const processProtectedData = useCallback(
+    async (params: ProcessProtectedDataParams): Promise<VerificationResult | null> => {
+      if (!dataProtector) {
+        setError("DataProtector not initialized. Please connect your wallet.");
+        return null;
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        console.log("Processing protected data in TEE:", params.protectedDataAddress);
+        
+        const result = await dataProtector.core.processProtectedData({
+          protectedData: params.protectedDataAddress,
+          app: params.appAddress,
+          maxPrice: params.maxPrice || 0,
+        });
+
+        console.log("TEE processing complete:", result);
+        
+        // Parse the result
+        if (result && typeof result === 'object' && 'result' in result) {
+          try {
+            // Result may be ArrayBuffer or string
+            const resultData = result.result;
+            const resultString = typeof resultData === 'string' 
+              ? resultData 
+              : new TextDecoder().decode(resultData as ArrayBuffer);
+            const verificationResult = JSON.parse(resultString);
+            return verificationResult as VerificationResult;
+          } catch {
+            return result as unknown as VerificationResult;
+          }
+        }
+        
+        return result as unknown as VerificationResult;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Failed to process protected data";
+        setError(message);
+        console.error("Error processing protected data:", err);
+        return null;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [dataProtector]
+  );
+
   return {
     isConnected,
     isInitialized: !!dataProtector,
@@ -158,8 +232,10 @@ export function useDataProtector(): UseDataProtectorReturn {
     protectData,
     grantAccess,
     fetchProtectedData,
+    processProtectedData,
   };
 }
 
 // Re-export the DataObject type for use in components
 export type { DataObject };
+

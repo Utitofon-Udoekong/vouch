@@ -62,6 +62,7 @@ export default function PublicBadgePage({ params }: PageProps) {
                             verifiedDate={verifiedDate}
                             status="verified"
                             protectedDataAddress={address}
+                            teeVerified={true}
                         />
 
                         {/* Verification Info */}

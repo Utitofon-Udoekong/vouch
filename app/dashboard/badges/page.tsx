@@ -92,6 +92,7 @@ export default function BadgesPage() {
                                             verifiedDate={formatDate(data.creationTimestamp)}
                                             status="verified"
                                             protectedDataAddress={data.address}
+                                            teeVerified={true}
                                         />
                                     </Link>
                                 );

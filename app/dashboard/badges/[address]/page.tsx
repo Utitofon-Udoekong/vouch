@@ -76,6 +76,7 @@ export default function BadgeDetailPage({ params }: PageProps) {
                     verifiedDate={verifiedDate}
                     status="verified"
                     protectedDataAddress={address}
+                    teeVerified={true}
                 />
 
                 {/* Verification Info */}
@@ -134,8 +135,8 @@ export default function BadgeDetailPage({ params }: PageProps) {
                         <button
                             onClick={handleCopy}
                             className={`px-4 h-10 border transition-all ${copied
-                                    ? "border-green-500 bg-green-500/10 text-green-400"
-                                    : "border-[#27272a] hover:bg-[#18181b] text-white"
+                                ? "border-green-500 bg-green-500/10 text-green-400"
+                                : "border-[#27272a] hover:bg-[#18181b] text-white"
                                 }`}
                         >
                             {copied ? "Copied!" : "Copy"}

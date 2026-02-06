@@ -6,6 +6,7 @@ interface YieldBadgeProps {
     verifiedDate: string;
     status: "verified" | "pending" | "expired";
     protectedDataAddress?: string;
+    teeVerified?: boolean;
     onClick?: () => void;
 }
 
@@ -15,6 +16,7 @@ export function YieldBadge({
     verifiedDate,
     status,
     protectedDataAddress,
+    teeVerified = false,
     onClick,
 }: YieldBadgeProps) {
     const statusConfig = {
@@ -45,9 +47,19 @@ export function YieldBadge({
 
     return (
         <div
-            className={`border ${config.border} ${config.bg} p-6 cursor-pointer hover:bg-opacity-20 transition-all group`}
+            className={`border ${config.border} ${config.bg} p-6 cursor-pointer hover:bg-opacity-20 transition-all group relative overflow-hidden`}
             onClick={onClick}
         >
+            {/* TEE Verified Badge */}
+            {teeVerified && (
+                <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-600 to-blue-500 text-white text-[9px] font-mono px-3 py-1 flex items-center gap-1.5">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    TEE VERIFIED
+                </div>
+            )}
+
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -94,6 +106,13 @@ export function YieldBadge({
                         <span className="text-xs text-gray-500 font-mono">
                             {protectedDataAddress.slice(0, 6)}...{protectedDataAddress.slice(-4)}
                         </span>
+                    </div>
+                )}
+                {/* TEE Enclave Info */}
+                {teeVerified && (
+                    <div className="flex items-center justify-between pt-2 border-t border-[#27272a]/50">
+                        <span className="text-[10px] uppercase text-gray-500">Enclave</span>
+                        <span className="text-xs text-blue-400 font-mono">Intel SGX</span>
                     </div>
                 )}
             </div>
